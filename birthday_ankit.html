@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankit Bhai</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Fredoka+One&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            /* Darker background for fireworks */
+            font-family: 'Comic Neue', cursive;
+            text-align: center;
+            /* Monkey Cursor (SVG Data URI) */
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='32' height='32' viewport='0 0 100 100' style='fill:white;font-size:24px;'><text y='50%25' x='50%25' dy='.35em' text-anchor='middle'>🐵</text></svg>") 16 16, auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            color: white;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff6b6b;
+            font-size: 3rem;
+            text-shadow: 2px 2px 0px #fff;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #prank-btn {
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            background-color: #3498db;
+            color: white;
+            border: 2px solid #2980b9;
+            border-radius: 8px;
+            box-shadow: none;
+            cursor: pointer;
+            position: absolute;
+            /* Start slightly below center */
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.3s ease;
+            font-family: Arial, sans-serif;
+            white-space: nowrap;
+            z-index: 20;
+        }
+
+        /* Button gets crazier as attempts increase */
+        #prank-btn.crazy {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            background-color: #ff9f43;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #prank-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+
+        /* Explosive entrance for the final gift */
+        .blast-in {
+            animation: blastIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes blastIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.1) rotate(-10deg);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(5deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .reveal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .reveal-img {
+            max-width: 350px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+            /* Glowing border for premium feel */
+            margin: 20px;
+            border: 5px solid #fff;
+        }
+
+        .emoji-rain {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            animation: fall linear forwards;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Canvas for Fireworks */
+        #fireworks-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Trump Video in corner */
+        #trump-video {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            border: 3px solid #FFD700;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #trump-video.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="fireworks-canvas"></canvas>
+
+    <div id="game-container">
+        <!-- Introduction - No spoiler! -->
+        <h1 id="main-title">Hey Ankit Bro!</h1>
+
+        <!-- The Prank Button -->
+        <button id="prank-btn">Click for Gift 🎁</button>
+
+        <!-- Phase 1: Karela Reveal -->
+        <div id="karela-reveal" class="reveal-content hidden">
+            <h1>Happy Birthday Ankit!</h1>
+            <img src="karela.png" alt="Karela Gift" class="reveal-img"
+                style="border-color: green; box-shadow: 0 0 20px green; max-width: 250px;">
+            <h2>Yeh lo gift! 😜</h2>
+            <p>(Sehat ke liye achha hai!)</p>
+        </div>
+
+        <!-- Phase 2: Real Cake & Fire Blast -->
+        <div id="cake-reveal" class="reveal-content hidden">
+            <h1 style="font-size: 4rem; color: #FFD700; text-shadow: 0 0 20px #ff6b6b;">HAPPY BIRTHDAY ANKIT! 🥳</h1>
+            <img src="ankit.png" alt="Ankit Birthday" class="reveal-img">
+            <h2>Ek aur saal budhapa ki oor 💀</h2>
+        </div>
+    </div>
+
+    <audio id="first-sound" src="first_reveal.mp3"></audio>
+    <audio id="final-sound" src="final_reveal.mp3"></audio>
+
+    <!-- Trump Video (hidden initially) -->
+    <video id="trump-video" src="trump_wish.mp4"></video>
+
+    <script>
+        const btn = document.getElementById('prank-btn');
+        const karelaDiv = document.getElementById('karela-reveal');
+        const cakeDiv = document.getElementById('cake-reveal');
+        const title = document.getElementById('main-title');
+        const firstSound = document.getElementById('first-sound');
+        const finalSound = document.getElementById('final-sound');
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize canvas
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        let attempts = 0;
+        const maxAttempts = 15; // More teasing!
+        let isPlayable = false;
+
+        const phrases = [
+            "Arrey pakad! 🤣",
+            "Oye hero! 😎",
+            "Rehne do! 😂",
+            "Too slow! 🐢",
+            "Koshish toh karo bro! 😜",
+            "Pakad ke dikhaw! 🐒",
+            "Almost there! 😉",
+            "Haha! Miss! 😝",
+            "Itna slow? 🐌",
+            "Try harder! 💪",
+            "Ankit ki umar ho gayi! 👴",
+            "Chal chal next! 🏃",
+            "Bechara BHAii",
+            "Ankitwaa Chitwaa! 😜",
+            "Apun hi game hai! 🎮"
+        ];
+
+        // Prank Visual Logic
+        btn.addEventListener('mouseover', () => {
+            if (isPlayable) return;
+
+            attempts++;
+
+            // Make button crazier after first few attempts
+            if (attempts > 3 && !btn.classList.contains('crazy')) {
+                btn.classList.add('crazy');
+            }
+
+            if (attempts >= maxAttempts) {
+                isPlayable = true;
+                btn.textContent = "Okay bhai, thak gaya hoga. Le lo apna gift! 🙄";
+                btn.style.backgroundColor = "#2ecc71";
+                btn.style.transform = "scale(1.2)";
+                btn.style.boxShadow = "0 0 30px #2ecc71";
+                return;
+            }
+
+            runAway();
+            const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+            btn.textContent = randomPhrase;
+            rainEmojis();
+        });
+
+        function runAway() {
+            const padding = 100;
+            const newX = Math.random() * (window.innerWidth - padding * 2) + padding;
+            const newY = Math.random() * (window.innerHeight - padding * 2) + padding;
+
+            const safeX = Math.max(50, Math.min(newX, window.innerWidth - 200));
+            const safeY = Math.max(50, Math.min(newY, window.innerHeight - 100));
+
+            btn.style.left = safeX + 'px';
+            btn.style.top = safeY + 'px';
+            btn.style.transform = `scale(${0.9 + Math.random() * 0.2}) rotate(${Math.random() * 20 - 10}deg)`;
+        }
+
+        function rainEmojis() {
+            const container = document.body;
+            for (let i = 0; i < 5; i++) {
+                const emoji = document.createElement('div');
+                emoji.classList.add('emoji-rain');
+                emoji.textContent = '😂';
+                emoji.style.left = Math.random() * 100 + 'vw';
+                emoji.style.animationDuration = (1 + Math.random() * 2) + 's';
+                container.appendChild(emoji);
+                setTimeout(() => emoji.remove(), 3000);
+            }
+        }
+
+        btn.addEventListener('click', () => {
+            if (!isPlayable && attempts < maxAttempts) {
+                runAway();
+                return;
+            }
+            playReveal();
+        });
+
+        function playReveal() {
+            // Play first sound for Karela
+            try { firstSound.play().catch(e => { }); } catch (e) { }
+
+            btn.style.display = 'none';
+            title.style.display = 'none';
+
+            karelaDiv.classList.remove('hidden');
+            karelaDiv.classList.add('fade-in');
+
+            setTimeout(() => {
+                karelaDiv.classList.add('fade-out');
+                setTimeout(() => {
+                    karelaDiv.classList.add('hidden');
+
+                    // Play final sound for birthday reveal
+                    try { finalSound.play().catch(e => { }); } catch (e) { }
+
+                    // Show Cake with BLAST animation
+                    cakeDiv.classList.remove('hidden');
+                    cakeDiv.classList.add('blast-in');
+
+                    // Trigger Fireworks
+                    loopFireworks();
+
+                    // After 5 seconds, play Trump video
+                    setTimeout(() => {
+                        playTrumpVideo();
+                    }, 5000);
+
+                }, 1000);
+            }, 6000);
+        }
+
+        // Trump Video Logic
+        const trumpVideo = document.getElementById('trump-video');
+
+        function playTrumpVideo() {
+            // Lower the music volume to 5%
+            finalSound.volume = 0.05;
+
+            // Show and play video
+            trumpVideo.classList.add('visible');
+            trumpVideo.play();
+
+            // When video ends, restore volume
+            trumpVideo.addEventListener('ended', () => {
+                finalSound.volume = 1.0; // Back to normal
+                trumpVideo.classList.remove('visible');
+            });
+        }
+
+        // --- FIREWORKS ENGINE ---
+        const particles = [];
+        const colors = ['#ff0043', '#14fc56', '#1e90ff', '#e4ff1a', '#ff7800', '#ffffff'];
+
+        function createFirework(x, y) {
+            const count = 30; // particles per explosion
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 2;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    decay: 0.015 + Math.random() * 0.01
+                });
+            }
+        }
+
+        function loopFireworks() {
+            requestAnimationFrame(loopFireworks);
+
+            // Fade effect for trails
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.globalCompositeOperation = 'lighter';
+
+            // Randomly launch fireworks
+            if (Math.random() < 0.05) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height * 0.7; // Keep somewhat high
+                createFirework(x, y);
+            }
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05; // Gravity
+                p.alpha -= p.decay;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fill();
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>
