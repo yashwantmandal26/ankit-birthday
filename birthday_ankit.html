@@ -6,34 +6,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ankit Bhai</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Fredoka+One&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             height: 100vh;
             overflow: hidden;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            /* Darker background for fireworks */
-            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0f1a3e 50%, #1a2a4e 75%, #0a1a2e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            font-family: 'Rajdhani', sans-serif;
             text-align: center;
-            /* Monkey Cursor (SVG Data URI) */
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='32' height='32' viewport='0 0 100 100' style='fill:white;font-size:24px;'><text y='50%25' x='50%25' dy='.35em' text-anchor='middle'>🐵</text></svg>") 16 16, auto;
+            /* Monkey Cursor */
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewport='0 0 100 100' style='fill:white;font-size:24px;'><text y='50%25' x='50%25' dy='.35em' text-anchor='middle'>🐵</text></svg>") 16 16, auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             user-select: none;
             color: white;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Floating orbs in background */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+            animation: floatOrbs 8s ease-in-out infinite;
+        }
+
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            top: -100px;
+            left: -100px;
+        }
+
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, #00ff88, #0088ff);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -4s;
+        }
+
+        @keyframes floatOrbs {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) scale(0.95);
+            }
+
+            75% {
+                transform: translate(40px, 10px) scale(1.05);
+            }
+        }
+
+        /* Scanline effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 255, 0.015) 2px,
+                    rgba(0, 255, 255, 0.015) 4px);
+            pointer-events: none;
+            z-index: 1000;
         }
 
         h1 {
-            font-family: 'Fredoka One', cursive;
-            color: #ff6b6b;
-            font-size: 3rem;
-            text-shadow: 2px 2px 0px #fff;
-            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            color: transparent;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #00ff88, #00ffff);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
             z-index: 10;
+            animation: textGlow 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+        }
+
+        @keyframes textGlow {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+                filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+            }
+
+            50% {
+                background-position: 100% 50%;
+                filter: drop-shadow(0 0 30px rgba(255, 0, 255, 0.7));
+            }
         }
 
         #game-container {
@@ -44,40 +153,87 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            z-index: 10;
         }
 
+        /* Glassmorphism Button */
         #prank-btn {
-            padding: 12px 24px;
-            font-size: 1.2rem;
-            background-color: #3498db;
-            color: white;
-            border: 2px solid #2980b9;
-            border-radius: 8px;
-            box-shadow: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(255, 0, 255, 0.15));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            box-shadow:
+                0 8px 32px rgba(0, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 0 20px rgba(0, 255, 255, 0.3);
             cursor: pointer;
             position: absolute;
-            /* Start slightly below center */
             top: 60%;
             left: 50%;
             transform: translateX(-50%);
-            transition: all 0.3s ease;
-            font-family: Arial, sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             white-space: nowrap;
             z-index: 20;
+            overflow: hidden;
         }
 
-        /* Button gets crazier as attempts increase */
-        #prank-btn.crazy {
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.5rem;
-            background-color: #ff9f43;
-            border: none;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        #prank-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        #prank-btn:hover::before {
+            left: 100%;
         }
 
         #prank-btn:hover {
-            transform: scale(1.1);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow:
+                0 12px 40px rgba(0, 255, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 0 40px rgba(255, 0, 255, 0.4);
+        }
+
+        /* Crazy button state - More neon! */
+        #prank-btn.crazy {
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.25), rgba(255, 150, 0, 0.25));
+            border: 2px solid rgba(255, 0, 255, 0.5);
+            box-shadow:
+                0 0 30px rgba(255, 0, 255, 0.5),
+                0 0 60px rgba(255, 150, 0, 0.3),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+            animation: neonPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+
+            0%,
+            100% {
+                box-shadow:
+                    0 0 30px rgba(255, 0, 255, 0.5),
+                    0 0 60px rgba(255, 150, 0, 0.3);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 50px rgba(255, 0, 255, 0.8),
+                    0 0 80px rgba(255, 150, 0, 0.5);
+            }
         }
 
         .hidden {
@@ -92,7 +248,6 @@
             animation: fadeOut 1s ease-out forwards;
         }
 
-        /* Explosive entrance for the final gift */
         .blast-in {
             animation: blastIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
@@ -100,10 +255,12 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: translateY(20px);
             }
 
             to {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -121,11 +278,13 @@
             0% {
                 opacity: 0;
                 transform: scale(0.1) rotate(-10deg);
+                filter: blur(10px);
             }
 
             50% {
                 opacity: 1;
-                transform: scale(1.2) rotate(5deg);
+                transform: scale(1.15) rotate(3deg);
+                filter: blur(0);
             }
 
             100% {
@@ -134,23 +293,110 @@
             }
         }
 
+        /* Glass Card for reveal content */
         .reveal-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: cardFloat 4s ease-in-out infinite;
+        }
+
+        /* Animated border for glass card */
+        .reveal-content::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
+            background-size: 400% 400%;
+            border-radius: 26px;
+            z-index: -1;
+            animation: borderGlow 3s ease infinite;
+            opacity: 0.7;
+        }
+
+        .reveal-content::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: linear-gradient(135deg, rgba(10, 10, 30, 0.95), rgba(20, 10, 40, 0.95));
+            border-radius: 22px;
+            z-index: -1;
+        }
+
+        @keyframes cardFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes borderGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .reveal-img {
-            max-width: 350px;
-            border-radius: 15px;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
-            /* Glowing border for premium feel */
-            margin: 20px;
-            border: 5px solid #fff;
+            max-width: 220px;
+            border-radius: 16px;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.4),
+                0 0 80px rgba(255, 0, 255, 0.2);
+            margin: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: imageGlow 3s ease-in-out infinite;
         }
 
+        .reveal-img:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.6),
+                0 0 120px rgba(255, 0, 255, 0.4);
+        }
+
+        @keyframes imageGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(0, 255, 255, 0.4), 0 0 80px rgba(255, 0, 255, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 60px rgba(0, 255, 255, 0.6), 0 0 100px rgba(255, 0, 255, 0.4);
+            }
+        }
+
+        /* Emoji rain with glow */
         .emoji-rain {
             position: fixed;
             top: -50px;
@@ -158,11 +404,61 @@
             animation: fall linear forwards;
             pointer-events: none;
             z-index: 5;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.5));
         }
 
         @keyframes fall {
             to {
-                transform: translateY(110vh) rotate(360deg);
+                transform: translateY(110vh) rotate(720deg);
+            }
+        }
+
+        /* Sparkle Stars */
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 10px #fff, 0 0 20px #00ffff;
+            }
+        }
+
+        /* Confetti particles */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100;
+            animation: confettiFall 4s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
             }
         }
 
@@ -177,51 +473,426 @@
             z-index: 1;
         }
 
-        /* Trump Video in corner */
+        /* Glass Video Container */
         #trump-video {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-            border: 3px solid #FFD700;
+            bottom: 15px;
+            right: 15px;
+            width: 200px;
+            border-radius: 16px;
+            box-shadow:
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 0 60px rgba(255, 0, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             z-index: 100;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
         }
 
         #trump-video.visible {
             opacity: 1;
+            animation: videoGlow 2s ease-in-out infinite, videoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes videoGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(255, 0, 255, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(0, 255, 255, 0.7), 0 0 100px rgba(255, 0, 255, 0.5);
+            }
+        }
+
+        @keyframes videoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Karela section styles */
+        #karela-reveal h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #00ff88, #00ffff, #00ff88);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textShimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes textShimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        #karela-reveal h2,
+        #karela-reveal p {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes textPulse {
+
+            0%,
+            100% {
+                opacity: 0.9;
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+            }
+        }
+
+        /* Cake reveal section - PREMIUM */
+        #cake-reveal h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #FFD700, #ff6b6b, #ff00ff, #00ffff, #FFD700);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.7));
+            animation: celebrateText 3s ease-in-out infinite;
+        }
+
+        @keyframes celebrateText {
+            0% {
+                background-position: 0% 50%;
+                filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+            }
+
+            50% {
+                background-position: 100% 50%;
+                filter: drop-shadow(0 0 40px rgba(255, 0, 255, 0.8));
+            }
+
+            100% {
+                background-position: 200% 50%;
+                filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+            }
+        }
+
+        #cake-reveal h2 {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            animation: subtitleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes subtitleGlow {
+
+            0%,
+            100% {
+                text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            }
+
+            50% {
+                text-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 50px rgba(0, 255, 255, 0.5);
+            }
+        }
+
+        /* Floating particles container */
+        #particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+
+        /* Large Desktop / 16:9 Laptop Screens (1920x1080 and above) */
+        @media (min-width: 1200px) and (min-aspect-ratio: 16/10) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            #prank-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .reveal-img {
+                max-width: 280px;
+            }
+
+            #cake-reveal h1 {
+                font-size: 2.8rem !important;
+            }
+
+            #cake-reveal h2 {
+                font-size: 1.3rem;
+            }
+
+            #trump-video {
+                width: 220px;
+            }
+        }
+
+        /* Medium Laptops (1366x768 typical) */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            #prank-btn {
+                padding: 8px 18px;
+                font-size: 0.95rem;
+            }
+
+            .reveal-img {
+                max-width: 240px;
+            }
+
+            #cake-reveal h1 {
+                font-size: 2.5rem !important;
+            }
+
+            #trump-video {
+                width: 180px;
+            }
+        }
+
+        /* Tablets (iPad, etc.) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            #prank-btn {
+                padding: 12px 20px;
+                font-size: 1.1rem;
+            }
+
+            .reveal-img {
+                max-width: 280px;
+            }
+
+            #cake-reveal h1 {
+                font-size: 3rem !important;
+            }
+
+            #cake-reveal h2 {
+                font-size: 1.5rem;
+            }
+
+            #trump-video {
+                width: 250px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Mobile Phones (Landscape) */
+        @media (max-width: 767px) and (orientation: landscape) {
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            #prank-btn {
+                padding: 10px 18px;
+                font-size: 1rem;
+            }
+
+            #prank-btn.crazy {
+                font-size: 1.1rem;
+            }
+
+            .reveal-img {
+                max-width: 180px;
+                margin: 10px;
+            }
+
+            #cake-reveal h1 {
+                font-size: 2rem !important;
+            }
+
+            #cake-reveal h2 {
+                font-size: 1rem;
+            }
+
+            #karela-reveal h2,
+            #karela-reveal p {
+                font-size: 1rem;
+            }
+
+            #trump-video {
+                width: 180px;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .emoji-rain {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Mobile Phones (Portrait) */
+        @media (max-width: 576px) and (orientation: portrait) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+                padding: 0 10px;
+            }
+
+            #prank-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+                max-width: 85vw;
+                white-space: normal;
+                text-align: center;
+                line-height: 1.4;
+            }
+
+            #prank-btn.crazy {
+                font-size: 1.1rem;
+                padding: 14px 22px;
+            }
+
+            .reveal-img {
+                max-width: 85vw;
+                max-height: 40vh;
+                object-fit: contain;
+                margin: 15px 10px;
+            }
+
+            #cake-reveal h1 {
+                font-size: 2rem !important;
+                padding: 0 10px;
+                line-height: 1.3;
+            }
+
+            #cake-reveal h2 {
+                font-size: 1.2rem;
+                padding: 0 10px;
+            }
+
+            #karela-reveal h1 {
+                font-size: 1.8rem;
+            }
+
+            #karela-reveal h2 {
+                font-size: 1.1rem;
+            }
+
+            #karela-reveal p {
+                font-size: 0.95rem;
+            }
+
+            #trump-video {
+                width: 55vw;
+                max-width: 220px;
+                bottom: 10px;
+                right: 10px;
+                border-radius: 10px;
+            }
+
+            .emoji-rain {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Extra Small Phones (iPhone SE, etc.) */
+        @media (max-width: 375px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #prank-btn {
+                font-size: 0.9rem;
+                padding: 10px 16px;
+            }
+
+            #cake-reveal h1 {
+                font-size: 1.6rem !important;
+            }
+
+            #cake-reveal h2 {
+                font-size: 1rem;
+            }
+
+            .reveal-img {
+                max-width: 90vw;
+            }
+
+            #trump-video {
+                width: 50vw;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            #prank-btn {
+                /* Larger touch target for mobile */
+                min-height: 48px;
+                min-width: 120px;
+            }
+
+            /* Remove hover effects that don't work well on touch */
+            #prank-btn:hover {
+                transform: none;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <!-- Particles Container for sparkles -->
+    <div id="particles-container"></div>
+
     <canvas id="fireworks-canvas"></canvas>
 
     <div id="game-container">
         <!-- Introduction - No spoiler! -->
-        <h1 id="main-title">Hey Ankit Bro!</h1>
+        <h1 id="main-title">Hey Ankit Bro! ✨</h1>
 
         <!-- The Prank Button -->
         <button id="prank-btn">Click for Gift 🎁</button>
 
         <!-- Phase 1: Karela Reveal -->
         <div id="karela-reveal" class="reveal-content hidden">
-            <h1>Happy Birthday Ankit!</h1>
+            <h1>Happy Birthday Ankit! 🎉</h1>
             <img src="karela.png" alt="Karela Gift" class="reveal-img"
-                style="border-color: green; box-shadow: 0 0 20px green; max-width: 250px;">
+                style="box-shadow: 0 0 30px rgba(0, 255, 136, 0.6), 0 0 60px rgba(0, 255, 136, 0.3); max-width: 200px;">
             <h2>Yeh lo gift! 😜</h2>
             <p>(Sehat ke liye achha hai!)</p>
         </div>
 
         <!-- Phase 2: Real Cake & Fire Blast -->
         <div id="cake-reveal" class="reveal-content hidden">
-            <h1 style="font-size: 4rem; color: #FFD700; text-shadow: 0 0 20px #ff6b6b;">HAPPY BIRTHDAY ANKIT! 🥳</h1>
+            <h1>🎂 HAPPY BIRTHDAY ANKIT! 🎂</h1>
             <img src="ankit.png" alt="Ankit Birthday" class="reveal-img">
-            <h2>Ek aur saal budhapa ki oor 💀</h2>
+            <h2>✨ Ek aur saal budhape ki oor 💀 ✨</h2>
         </div>
     </div>
 
@@ -240,6 +911,7 @@
         const finalSound = document.getElementById('final-sound');
         const canvas = document.getElementById('fireworks-canvas');
         const ctx = canvas.getContext('2d');
+        const particlesContainer = document.getElementById('particles-container');
 
         // Resize canvas
         canvas.width = window.innerWidth;
@@ -249,8 +921,55 @@
             canvas.height = window.innerHeight;
         });
 
+        // ========== SPARKLE STARS BACKGROUND ==========
+        function createSparkles() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + 'vw';
+                    sparkle.style.top = Math.random() * 100 + 'vh';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+                    sparkle.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+                    particlesContainer.appendChild(sparkle);
+                }, i * 100);
+            }
+        }
+        createSparkles();
+
+        // Continuously add new sparkles
+        setInterval(() => {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + 'vw';
+            sparkle.style.top = Math.random() * 100 + 'vh';
+            sparkle.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+            particlesContainer.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 4000);
+        }, 300);
+
+        // ========== CONFETTI EXPLOSION ==========
+        function createConfetti() {
+            const confettiColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4'];
+            const shapes = ['square', 'circle'];
+
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                    confetti.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)] === 'circle' ? '50%' : '0';
+                    confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+
         let attempts = 0;
-        const maxAttempts = 15; // More teasing!
+        const maxAttempts = 15;
         let isPlayable = false;
 
         const phrases = [
@@ -266,18 +985,21 @@
             "Try harder! 💪",
             "Ankit ki umar ho gayi! 👴",
             "Chal chal next! 🏃",
-            "Bechara BHAii",
+            "Bechara BHAii 💀",
             "Ankitwaa Chitwaa! 😜",
             "Apun hi game hai! 🎮"
         ];
 
         // Prank Visual Logic
-        btn.addEventListener('mouseover', () => {
+        function handlePrankAttempt(e) {
             if (isPlayable) return;
+
+            if (e.type === 'touchstart') {
+                e.preventDefault();
+            }
 
             attempts++;
 
-            // Make button crazier after first few attempts
             if (attempts > 3 && !btn.classList.contains('crazy')) {
                 btn.classList.add('crazy');
             }
@@ -285,9 +1007,9 @@
             if (attempts >= maxAttempts) {
                 isPlayable = true;
                 btn.textContent = "Okay bhai, thak gaya hoga. Le lo apna gift! 🙄";
-                btn.style.backgroundColor = "#2ecc71";
+                btn.style.background = "linear-gradient(135deg, rgba(46, 204, 113, 0.4), rgba(0, 255, 136, 0.4))";
                 btn.style.transform = "scale(1.2)";
-                btn.style.boxShadow = "0 0 30px #2ecc71";
+                btn.style.boxShadow = "0 0 40px rgba(46, 204, 113, 0.8), 0 0 80px rgba(0, 255, 136, 0.5)";
                 return;
             }
 
@@ -295,29 +1017,41 @@
             const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
             btn.textContent = randomPhrase;
             rainEmojis();
-        });
-
-        function runAway() {
-            const padding = 100;
-            const newX = Math.random() * (window.innerWidth - padding * 2) + padding;
-            const newY = Math.random() * (window.innerHeight - padding * 2) + padding;
-
-            const safeX = Math.max(50, Math.min(newX, window.innerWidth - 200));
-            const safeY = Math.max(50, Math.min(newY, window.innerHeight - 100));
-
-            btn.style.left = safeX + 'px';
-            btn.style.top = safeY + 'px';
-            btn.style.transform = `scale(${0.9 + Math.random() * 0.2}) rotate(${Math.random() * 20 - 10}deg)`;
         }
 
+        btn.addEventListener('mouseover', handlePrankAttempt);
+        btn.addEventListener('touchstart', handlePrankAttempt, { passive: false });
+
+        function runAway() {
+            const btnWidth = btn.offsetWidth || 200;
+            const btnHeight = btn.offsetHeight || 50;
+            const padding = Math.min(50, window.innerWidth * 0.05);
+
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+            const minX = padding;
+            const minY = padding + 60;
+
+            const newX = Math.random() * (maxX - minX) + minX;
+            const newY = Math.random() * (maxY - minY) + minY;
+
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+            btn.style.transform = `scale(${0.95 + Math.random() * 0.1}) rotate(${Math.random() * 10 - 5}deg)`;
+        }
+
+        // Enhanced emoji rain with variety
         function rainEmojis() {
             const container = document.body;
-            for (let i = 0; i < 5; i++) {
+            const emojis = ['😂', '🤣', '😝', '😜', '🙈', '🙊', '💀', '🔥'];
+
+            for (let i = 0; i < 8; i++) {
                 const emoji = document.createElement('div');
                 emoji.classList.add('emoji-rain');
-                emoji.textContent = '😂';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
                 emoji.style.left = Math.random() * 100 + 'vw';
                 emoji.style.animationDuration = (1 + Math.random() * 2) + 's';
+                emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
                 container.appendChild(emoji);
                 setTimeout(() => emoji.remove(), 3000);
             }
@@ -332,7 +1066,6 @@
         });
 
         function playReveal() {
-            // Play first sound for Karela
             try { firstSound.play().catch(e => { }); } catch (e) { }
 
             btn.style.display = 'none';
@@ -346,17 +1079,18 @@
                 setTimeout(() => {
                     karelaDiv.classList.add('hidden');
 
-                    // Play final sound for birthday reveal
                     try { finalSound.play().catch(e => { }); } catch (e) { }
 
-                    // Show Cake with BLAST animation
                     cakeDiv.classList.remove('hidden');
                     cakeDiv.classList.add('blast-in');
 
-                    // Trigger Fireworks
+                    // Start fireworks and confetti!
                     loopFireworks();
+                    createConfetti();
 
-                    // After 5 seconds, play Trump video
+                    // Continue confetti every few seconds
+                    const confettiInterval = setInterval(createConfetti, 4000);
+
                     setTimeout(() => {
                         playTrumpVideo();
                     }, 5000);
@@ -369,29 +1103,26 @@
         const trumpVideo = document.getElementById('trump-video');
 
         function playTrumpVideo() {
-            // Lower the music volume to 5%
             finalSound.volume = 0.05;
 
-            // Show and play video
             trumpVideo.classList.add('visible');
             trumpVideo.play();
 
-            // When video ends, restore volume
             trumpVideo.addEventListener('ended', () => {
-                finalSound.volume = 1.0; // Back to normal
+                finalSound.volume = 1.0;
                 trumpVideo.classList.remove('visible');
             });
         }
 
-        // --- FIREWORKS ENGINE ---
+        // ========== ENHANCED FIREWORKS ENGINE ==========
         const particles = [];
-        const colors = ['#ff0043', '#14fc56', '#1e90ff', '#e4ff1a', '#ff7800', '#ffffff'];
+        const colors = ['#ff0043', '#14fc56', '#1e90ff', '#e4ff1a', '#ff7800', '#ffffff', '#ff00ff', '#00ffff'];
 
         function createFirework(x, y) {
-            const count = 30; // particles per explosion
+            const count = 50; // More particles!
             for (let i = 0; i < count; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 5 + 2;
+                const speed = Math.random() * 6 + 3;
                 particles.push({
                     x: x,
                     y: y,
@@ -399,7 +1130,8 @@
                     vy: Math.sin(angle) * speed,
                     alpha: 1,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    decay: 0.015 + Math.random() * 0.01
+                    decay: 0.012 + Math.random() * 0.008,
+                    size: Math.random() * 3 + 2
                 });
             }
         }
@@ -409,15 +1141,15 @@
 
             // Fade effect for trails
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.globalCompositeOperation = 'lighter';
 
-            // Randomly launch fireworks
-            if (Math.random() < 0.05) {
+            // More frequent fireworks!
+            if (Math.random() < 0.08) {
                 const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height * 0.7; // Keep somewhat high
+                const y = Math.random() * canvas.height * 0.6;
                 createFirework(x, y);
             }
 
@@ -426,19 +1158,23 @@
                 const p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.05; // Gravity
+                p.vy += 0.04; // Lighter gravity
                 p.alpha -= p.decay;
 
                 if (p.alpha <= 0) {
                     particles.splice(i, 1);
                 } else {
                     ctx.beginPath();
-                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                     ctx.fillStyle = p.color;
                     ctx.globalAlpha = p.alpha;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
                     ctx.fill();
+                    ctx.shadowBlur = 0;
                 }
             }
+            ctx.globalAlpha = 1;
         }
 
     </script>
